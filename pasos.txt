@@ -1,0 +1,112 @@
+ dotnet new mvc -n ManejoPresupuesto
+
+para activar las validaciones del frontend
+ @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+ validaciones por atributo
+    crear Validaciones/PrimeraLetraMayusculaAttribute
+
+
+agregar la conexion a la bd en appsettings.json
+
+agregar Dapper
+   dotnet add package Dapper
+   dotnet add package Microsoft.Data.SqlClient
+
+crear Servicios/RepositoriosTiposCuentas
+
+agregar servicos en Program
+   builder.Services.AddTransient<IRepositorioTiposCuentas, RepositorioTiposCuentas>();
+
+vista TiposCuentas/Index
+vista TiposCuentas/Editar
+vista TiposCuentas/Borrar
+
+crear ServicioUsuarios
+agregar en Program
+   builder.Services.AddTransient<IServicioUsuarios, ServicioUsuarios>();
+
+
+agregar jquery-ui
+   https://jqueryui.com/
+   Stable
+   descargar y copiar en lib
+<script src="~/lib/jquery-ui/jquery-ui.min.js"></script>
+
+
+crear Models/Cuenta
+crear Models/CuentaCreacionViewModel
+
+crear Controllers/CuentasController
+
+crear Views/Cuentas/Crear
+
+agregar a Program
+   builder.Services.AddTransient<IRepositorioCuentas, RepositorioCuentas>();
+
+aislamiento de css en Layout
+   <link rel="stylesheet" href="ManejoPresupuesto.styles.css" asp-append-version="true" />
+   crear el archivo: Index.cshtml.css
+
+AutoMapper
+dotnet add package AutoMapper
+dotnet add package AutoMapper.Extensions.Microsoft.DependencyInjection
+
+   en Program.cs
+      builder.Services.AddAutoMapper(typeof(Program));
+
+crear enum TipoOperacion en Models/TipoOperacion
+
+crear Models/Categoria
+
+crear Servicios/RepositorioCategorias
+
+crear Controllers/CategoriasController
+
+agregar en Program: builder.Services.AddTransient<IRepositorioCategorias, RepositorioCategorias>();
+
+crear vistas Views/Categorias
+   /Crear
+   /Index
+   /Editar
+   /Borrar
+
+
+crear Models/Transaccion
+crear Models/TransaccionCreacionViewModel
+crear Models/TransaccionActualizacionViewModel
+crear Servicios/RepositorioTransacciones
+   agregar al Program.cs : builder.Services.AddTransient<IRepositorioTransacciones, RepositorioTransacciones>();
+crear Controllers/TransaccionesController
+
+vistas
+Views/Transacciones/Crear
+Views/Transacciones/Index
+Views/Transacciones/Editar
+
+crear Models/ObtenerTransaccionesPorCuenta
+crear Views/Cuentas/Detalle
+
+crear Models/ParametroObtenerTransaccionesPorUsuario
+crear Views/Shared/_ReporteTransaccionesDetalladas
+
+crear Servicios/ServicioReportes
+
+agregara a Program.cs
+   builder.Services.AddHttpContextAccessor();
+   builder.Services.AddTransient<IServicioReportes, ServicioReportes>();
+
+
+crear Views/Transacciones/_Submenu
+crear Views/Transacciones/Semanal
+crear Models/SubMenuTransacciones
+crear Models/ResultadoObtenerPorSemana
+crear Models/ReporteSemanalViewModel
+crear Views/Shared/_ResumenMontos
+crear Models/ResumenMontosViewModel
+crear Views/Shared/_NavegarPorMeses
+
+crear Models/ResultadoObtenerPorMes
+crear Models/ReporteMensualViewModel
