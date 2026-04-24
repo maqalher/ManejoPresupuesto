@@ -1,0 +1,33 @@
+# Dependencias
+bin/
+obj/
+packages/
+*.user
+*.suo
+
+# Archivos compilados
+*.dll
+*.exe
+*.pdb
+*.cache
+
+# Visual Studio
+.vs/
+.vscode/
+*.swp
+*.tmp
+
+# Archivos de configuración local
+appsettings.Development.json
+appsettings.Production.json
+
+# Logs
+*.log
+logs/
+
+# Otros
+*.sln.docstates
+*.pidb
+*.sln.ide
+*.pidb
+*.pidb*

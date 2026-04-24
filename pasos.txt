@@ -110,3 +110,12 @@ crear Views/Shared/_NavegarPorMeses
 
 crear Models/ResultadoObtenerPorMes
 crear Models/ReporteMensualViewModel
+
+agregar ClosedXML
+dotnet add package ClosedXML
+
+
+dotnet run
+
+bash
+dotnet run --project "ManejoPresupuesto.csproj"
