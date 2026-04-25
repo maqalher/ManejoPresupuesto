@@ -245,6 +245,44 @@ public class TransaccionesController: Controller
         return View();
     }
 
+    public async Task<JsonResult> ObtenerTransaccionesCalandario(DateTime start, DateTime end)
+    {
+        var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+
+        var transacciones = await repositorioTransacciones.ObtenerPorUsuarioId(
+            new ParametroObtenerTransaccionesPorUsuario
+            {
+                UsuarioId = usuarioId,
+                FechaInicio = start,
+                FechaFin = end
+            });
+
+        var eventosCalandario = transacciones.Select(transaccion => new EventoCalandario()
+        {
+            Title = transaccion.Monto.ToString("N"),
+            Start = transaccion.FechaTransaccion.ToString("yyyy-MM-dd"),
+            End = transaccion.FechaTransaccion.ToString("yyyy-MM-dd"),
+            Color = (transaccion.TipoOperacionId == TipoOperacion.Gasto) ? "Red" : null
+        });
+
+        return Json(eventosCalandario);
+    }
+
+    public async Task<JsonResult> ObtenerTransaccionesPorFecha(DateTime fecha)
+    {
+        var usuarioId = servicioUsuarios.ObtenerUsuarioId();
+
+        var transacciones = await repositorioTransacciones.ObtenerPorUsuarioId(
+            new ParametroObtenerTransaccionesPorUsuario
+            {
+                UsuarioId = usuarioId,
+                FechaInicio = fecha,
+                FechaFin = fecha
+            });
+
+        return Json(transacciones);
+    }
+
     public async Task<IActionResult> Crear()
     {
         var usuarioId = servicioUsuarios.ObtenerUsuarioId();

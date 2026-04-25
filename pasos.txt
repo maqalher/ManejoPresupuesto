@@ -119,3 +119,11 @@ dotnet run
 
 bash
 dotnet run --project "ManejoPresupuesto.csproj"
+
+Agregar fullcalendar
+   https://fullcalendar.io/docs/initialize-globals
+   Download
+   crear fullcalendar en wwwroot/lib y pegar archivos
+
+
+crear Models/EventoCalandario
