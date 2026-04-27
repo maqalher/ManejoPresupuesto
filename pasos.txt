@@ -170,3 +170,11 @@ crear polictica de Autorizacion en Program.cs y agregar a los controladores
 
 
 crear Views/Usuarios/_layout
+
+crear Models/PaginacionViewModel
+crear Models/PaginacionRespuesta
+
+http://localhost:5120/Categorias?pagina=1&recordsPorPagina=3
+
+
+crear Views/Shared/_Paginacion
