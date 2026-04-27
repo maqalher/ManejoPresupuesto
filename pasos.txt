@@ -127,3 +127,46 @@ Agregar fullcalendar
 
 
 crear Models/EventoCalandario
+
+
+crear Controllers/UsuariosController
+crear Models/RegistroViewModel
+crear Views/Usuarios/Registro
+
+crear Models/Usuario
+crear Servicios/UsuarioStore
+crear Servicios/RepositorioUsuarios
+
+agregar en Program.cs
+   builder.Services.AddTransient<IRepositorioUsuarios, RepositorioUsuarios>();
+   builder.Services.AddTransient<IUserStore<Usuario>, UsuarioStore>();
+   builder.Services.AddTransient<SignInManager<Usuario>>();
+   builder.Services.AddIdentityCore<Usuario>(); 
+   builder.Services.AddAuthentication(option =>
+   {
+      option.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+      option.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+      option.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+   }).AddCookie(IdentityConstants.ApplicationScheme, opciones =>
+   {
+      opciones.LoginPath = "/usuarios/login";
+   });
+
+   app.UseAuthentication();
+
+crear Servicios/MensajesDeErrorIdentity
+
+crear Views/Shared/_LinksLogin
+crear Models/LoginViewModel
+crear Views/Usuarios/Login
+
+crear polictica de Autorizacion en Program.cs y agregar a los controladores
+
+   var politicaUsuariosAutenticados = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+   builder.Services.AddControllersWithViews(opciones =>
+   {
+      opciones.Filters.Add(new AuthorizeFilter(politicaUsuariosAutenticados));
+   });
+
+
+crear Views/Usuarios/_layout

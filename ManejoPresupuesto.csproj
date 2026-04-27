@@ -11,6 +11,7 @@
     <Folder Include="Views\Categorias\" />
     <Folder Include="Views\TiposCuentas\" />
     <Folder Include="Views\Transacciones\" />
+    <Folder Include="Views\Usuarios\" />
   </ItemGroup>  
 
   <ItemGroup>
