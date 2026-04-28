@@ -178,3 +178,26 @@ http://localhost:5120/Categorias?pagina=1&recordsPorPagina=3
 
 
 crear Views/Shared/_Paginacion
+
+para recuperar password
+en Program.cs
+   builder.Services.AddIdentityCore<Usuario>(opciones =>
+   {
+      opciones.Password.RequireDigit = false;
+      opciones.Password.RequireLowercase = false;
+      opciones.Password.RequireUppercase = false;
+      opciones.Password.RequireNonAlphanumeric = false;
+   }).AddErrorDescriber<MensajesDeErrorIdentity>().AddDefaultTokenProviders();
+
+crear Servicios/
+
+en Program.cs
+   builder.Services.AddTransient<IServicioEmail, ServicioEmail>();
+
+click en el poyecto Administrar secretos de usuario
+
+crear Views/Usuarios/OlvideMiPassword
+crear Models/OlvideMiPasswordViewModel
+crear Models/RecuperarPasswordViewModel
+crear Views/Usuarios/RecuperarPassword
+crear Views/Usuarios/PasswordCambiado

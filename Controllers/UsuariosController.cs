@@ -1,10 +1,13 @@
 using System;
+using System.Text;
 using DocumentFormat.OpenXml.EMMA;
 using ManejoPresupuesto.Models;
+using ManejoPresupuesto.Servicios;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace ManejoPresupuesto.Controllers;
 
@@ -12,11 +15,13 @@ public class UsuariosController: Controller
 {
     private readonly UserManager<Usuario> userManager;
     private readonly SignInManager<Usuario> signInManager;
+    private readonly IServicioEmail servicioEmail;
 
-    public UsuariosController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager)
+    public UsuariosController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, IServicioEmail servicioEmail)
     {
         this.userManager = userManager;
         this.signInManager = signInManager;
+        this.servicioEmail = servicioEmail;
     }
 
     [AllowAnonymous]
@@ -89,5 +94,72 @@ public class UsuariosController: Controller
     {
         await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
         return RedirectToAction("Index", "Transacciones");
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult OlvideMiPassword(string mensaje = "")
+    {
+        ViewBag.Mesaje = mensaje;
+        return View();
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> OlvideMiPassword(OlvideMiPasswordViewModel modelo)
+    {
+        var mensaje = "Proceso concluido. Si el email dado se corresponde con uno de nuestros usuarios, en su bandeja de entrada podra encontrar las instrucciones para recuperar su contraseña";
+        ViewBag.Mensaje = mensaje;
+        ModelState.Clear();
+
+        var usuario = await userManager.FindByEmailAsync(modelo.Email);
+
+        if (usuario is null)
+        {
+            return View();
+        }
+
+        var codigo = await userManager.GeneratePasswordResetTokenAsync(usuario);
+        var codigoBase64 = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(codigo));
+        var enlace = Url.Action("RecuperarPassword", "Usuarios", new {codigo = codigoBase64}, protocol: Request.Scheme);
+        await servicioEmail.EnviarEmailCambioPassword(modelo.Email, enlace);
+        return View();
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult RecuperarPassword(string codigo = null)
+    {
+        if (codigo is null)
+        {
+            var mesnaje = "Codigo no encontrado";
+            return RedirectToAction("OlvideMiPassword", new {mesnaje});
+        }
+
+        var modelo = new RecuperarPasswordViewModel();
+        modelo.CodigoReseteo = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(codigo));
+        return View(modelo);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> RecuperarPassword(RecuperarPasswordViewModel modelo)
+    {
+        var usuario = await userManager.FindByEmailAsync(modelo.Email);
+
+        if (usuario is null)
+        {
+            return RedirectToAction("PasswordCambiado");
+        }
+
+        var resultados = await userManager.ResetPasswordAsync(usuario, modelo.CodigoReseteo, modelo.Password);
+        return RedirectToAction("PasswordCambiado");
+    }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public IActionResult PasswordCambiado()
+    {
+        return View();
     }
 }

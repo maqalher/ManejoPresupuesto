@@ -12,7 +12,7 @@ public class TipoCuenta
 //    [StringLength(maximumLength:50, MinimumLength = 3, ErrorMessage = "La longuitud del campo {0} debe de estar entre {2} y {1}")]
 //    [Display(Name = "Nombre del tipo cuenta")]
     [PrimeraLetraMayuscula]
-    [Remote(action:"VerificarExisteCuenta", controller: "TiposCuentas")]
+    [Remote(action:"VerificarExisteCuenta", controller: "TiposCuentas", AdditionalFields = nameof(Id))]
    public string Nombre { get; set; } = string.Empty;
    public int UsuarioId { get; set; }
    public int Orden { get; set; }

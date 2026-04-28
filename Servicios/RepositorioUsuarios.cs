@@ -9,6 +9,7 @@ public interface IRepositorioUsuarios
 {
     Task<int> CrearUsuario(Usuario usuario);
     Task<Usuario?> BuscarUsuarioPorEmail(string emailNormalizado);
+    Task Actualizar(Usuario usuario);
 }
 
 public class RepositorioUsuarios: IRepositorioUsuarios
@@ -92,5 +93,14 @@ public class RepositorioUsuarios: IRepositorioUsuarios
         return await connection.QuerySingleOrDefaultAsync<Usuario>(
             @"SELECT * FROM Usuarios WHERE EmailNormalizado = @emailNormalizado", new {emailNormalizado});
 
+    }
+
+    public async Task Actualizar(Usuario usuario)
+    {
+        using var connection = new SqlConnection(connectionString);
+        await connection.ExecuteAsync(@"
+        UPDATE Usuarios
+        SET PasswordHash = @PasswordHash
+        WHERE Id = @Id", usuario);
     }
 }
